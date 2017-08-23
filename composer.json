@@ -1,0 +1,15 @@
+{
+    "name": "hovensoft/duskphp",
+    "description": "A simple PHP framework",
+    "type": "project",
+    "require": {
+        "http-interop/response-sender": "^1.0"
+    },
+    "license": "GNU General Public License v3.0",
+    "authors": [
+        {
+            "name": "hovensoft",
+            "email": "adinquer@yahoo.com"
+        }
+    ]
+}
