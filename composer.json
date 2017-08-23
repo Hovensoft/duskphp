@@ -1,7 +1,7 @@
 {
     "name": "hovensoft/duskphp-core",
     "description": "A simple PHP framework",
-    "type": "project",
+    "type": "library",
     "require": {
         "http-interop/response-sender": "^1.0",
         "http-interop/http-middleware": "0.4.1",
@@ -10,7 +10,7 @@
     },
     "autoload": {
       "psr-4": {
-          "DuskPHP\\": "src/"
+          "DuskPHP\\Core\\": "src/"
       }
     },
     "license": "GNU General Public License v3.0",
