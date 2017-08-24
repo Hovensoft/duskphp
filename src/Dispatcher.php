@@ -1,6 +1,6 @@
 <?php
 
-namespace DuskPHP;
+namespace DuskPHP\Core;
 
 use GuzzleHttp\Psr7\Response;
 use Interop\Http\ServerMiddleware\DelegateInterface;
