@@ -6,13 +6,19 @@
  * Time: 00:39
  */
 
-namespace DuskPHP\Core  \Router;
+namespace DuskPHP\Core\Router;
 
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class Route
+ * A route associate a path with a middleware
+ * The router search the matching route with the URI and call the middleware
+ * @package DuskPHP\Core  \Router
+ */
 class Route
 {
     /**
@@ -41,15 +47,24 @@ class Route
         $this->middleware = $middleware;
     }
 
-    public function with($param, string $regex)
+    /**
+     * Add a regex to the path's parameters
+     * eg: path: "/posts/:id-:slug" with id a integer and slug a string, id's regex is "[0-9]+" and slug's regex: "[a-z\-0-9]+"
+     * @param string $param The parameter's name
+     * @param string $regex The associate regex which use to identify parameter
+     * @return $this The Route
+     */
+    public function with(string $param, string $regex)
     {
         $this->params[$param] = str_replace('(', '(?:', $regex);
         return $this;
     }
 
     /**
-     * @param string $url
-     * @return bool
+     * Check if the route match with the current URI
+     *
+     * @param string $url The URI
+     * @return bool True if match
      */
     public function match(string $url): bool {
         $url = trim($url, '/');
@@ -71,15 +86,15 @@ class Route
         return '([^/]+';
     }
 
+    /**
+     * Call the associate middleware
+     *
+     * @param ServerRequestInterface $request The current request
+     * @param DelegateInterface $delegate The delegate ware which call the next middleware
+     * @return \Psr\Http\Message\ResponseInterface The response
+     */
     public function call(ServerRequestInterface $request, DelegateInterface $delegate) {
-//        if (is_string($this->middleware)) {
-//            $params = explode('#', $this->middleware);
-//            $controller = "App\\Controller\\" . $params[0]."Controller";
-//            $controller = new $controller();
-//            return call_user_func_array([$controller, $params[1], $this->matches]);
-//        }
         return $this->middleware->process($request, $delegate);
-//        return call_user_func_array($this->middleware, $this->matches);
     }
 
     public function getURL($params): string {

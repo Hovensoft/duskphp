@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Dispacher
+ * A dispatcher call all saved middleware to create a response
  * @package DuskPHP
  */
 class Dispatcher implements DelegateInterface
@@ -25,6 +26,9 @@ class Dispatcher implements DelegateInterface
      */
     private $index = 0;
 
+    /**
+     * @var Response
+     */
     private $response;
 
     function __construct()
@@ -53,10 +57,10 @@ class Dispatcher implements DelegateInterface
     {
         $middleware = $this->getMiddleware();
         $this->index++;
+
+        //When all saved middleware were called
         if (is_null($middleware))
             return $this->response;
-        if(is_callable($middleware))
-            return $middleware($request, $this->response, [$this, 'process']);
         if ($middleware instanceof MiddlewareInterface)
             return $middleware->process($request, $this);
     }

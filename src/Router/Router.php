@@ -16,6 +16,11 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Class Router
+ * A router is a middleware which call an other middleware compared to the URI
+ * @package DuskPHP\Core\Router
+ */
 class Router implements MiddlewareInterface
 {
     /**
@@ -23,13 +28,32 @@ class Router implements MiddlewareInterface
      */
     private $routes = [];
 
+    /**
+     * @var array
+     */
     private $namedRoutes = [];
 
+    /**
+     * Add a route associate to the get http method
+     *
+     * @param string $path The path's route, which match with the URI
+     * @param MiddlewareInterface $middleware The associate middleware which will call if matching
+     * @param string $name The route's name, use to get the URL
+     * @return Route The created route
+     */
     public function get(string $path,MiddlewareInterface $middleware,string $name): Route
     {
         return $this->add($path, $middleware, $name, 'GET');
     }
 
+    /**
+     * Add a route associate to the get http method
+     *
+     * @param string $path The path's route, which match with the URI
+     * @param MiddlewareInterface $middleware The associate middleware which will call if matching
+     * @param string $name The route's name, use to get the URL
+     * @return Route The created route
+     */
     public function post(string $path, MiddlewareInterface $middleware,string $name): Route
     {
         return $this->add($path, $middleware, $name, 'POST');
@@ -48,21 +72,16 @@ class Router implements MiddlewareInterface
         return $route;
     }
 
-//    public function run(){
-//        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
-//            throw new RouterException('REQUEST_METHOD does not exist');
-//        }
-//
-//        foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
-//            if ($route->match($this->url)) {
-//                return $route->call();
-//            }
-//        }
-//
-//        throw new RouterException('No matching routes');
-//    }
-
-    public function url($name, $params = []){
+    /**
+     * Get the named route's URL and matching param's values
+     *
+     * @param string $name The route's name
+     * @param array $params The param's values which will replace in the URL
+     * @return string The route's URL
+     * @throws RouterException when the given name doesn't match with route's name
+     */
+    public function url(string $name, array $params = []): string
+    {
         if (!isset($this->namedRoutes[$name]))
             throw new RouterException('No route matches this name');
         return $this->namedRoutes[$name]->getURl($params);
@@ -72,15 +91,17 @@ class Router implements MiddlewareInterface
      * Process an incoming server request and return a response, optionally delegating
      * to the next middleware component to create the response.
      *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface $delegate
-     * @return ResponseInterface
-     * @throws RouterException
+     * Search the route and call the associate middleware
+     *
+     * @param ServerRequestInterface $request The current request
+     * @param DelegateInterface $delegate The next middleware
+     * @return ResponseInterface The response
+     * @throws RouterException when the http-method doesn't exist
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
         if (!isset($this->routes[$request->getMethod()]))
-            throw new RouterException($request->getMethod() . ' does not exist');
+            throw new RouterException('The method '.$request->getMethod() . ', does not exist');
 
         foreach ($this->routes[$request->getMethod()] as $route)
             if ($route->match($request->getQueryParams()['url']))
