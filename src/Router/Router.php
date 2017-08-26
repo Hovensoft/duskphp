@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dederobert
- * Date: 25/08/17
- * Time: 00:38.
- */
 
 namespace DuskPHP\Core\Router;
 
@@ -69,6 +63,7 @@ class Router implements MiddlewareInterface
         } else {
             throw new RouterException('The name\'s route must be defined');
         }
+
         return $route;
     }
 
@@ -87,6 +82,7 @@ class Router implements MiddlewareInterface
         if (!isset($this->namedRoutes[$name])) {
             throw new RouterException('No route matches this name');
         }
+
         return $this->namedRoutes[$name]->getURl($params);
     }
 
