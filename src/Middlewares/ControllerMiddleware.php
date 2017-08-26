@@ -1,28 +1,32 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: dederobert
+ * Date: 26/08/17
+ * Time: 12:53
+ */
 
-namespace DuskPHP\Core;
+namespace DuskPHP\Core\Middlewares;
 
 
-use GuzzleHttp\Psr7\Response;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Class HomePage
- * Very simple middleware use as example
- *
- * @package DuskPHP\Core
- */
-class HomePage implements MiddlewareInterface
+class ControllerMiddleware implements MiddlewareInterface
 {
+
+    /**
+     * @var callable
+     */
+    private $action;
+
+    private $response;
 
     /**
      * Process an incoming server request and return a response, optionally delegating
      * to the next middleware component to create the response.
-     *
-     * Print a basic HTML page
      *
      * @param ServerRequestInterface $request
      * @param DelegateInterface $delegate
@@ -31,11 +35,13 @@ class HomePage implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-//        $delegate->process($request);
+        $this->response = $delegate->process($request);
+        $action = $this->action;
+        return $action();
+    }
 
-        $response = new Response();
-        $body = $response->getBody();
-        $body->write(file_get_contents(dirname(__DIR__)."/assets/homepage.html"));
-        return $response->withBody($body);
+    public function setAction(callable $action)
+    {
+        $this->action = $action;
     }
 }
