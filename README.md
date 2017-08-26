@@ -1,4 +1,5 @@
 # DuskPHP
+[![Build Status](https://travis-ci.org/Hovensoft/duskphp-core.svg?branch=master)](https://travis-ci.org/Hovensoft/duskphp-core)
 A simple PHP framework build with _middleware pattern_
 
 ## LICENSE

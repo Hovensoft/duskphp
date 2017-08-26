@@ -3,7 +3,8 @@
 namespace DuskPHP\Core\Exception;
 
 /**
- * Class RouterException
- * @package DuskPHP\Core\Exception
+ * Class RouterException.
  */
-class RouterException extends \Exception {}
+class RouterException extends \Exception
+{
+}

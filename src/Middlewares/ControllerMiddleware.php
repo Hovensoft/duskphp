@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: dederobert
  * Date: 26/08/17
- * Time: 12:53
+ * Time: 12:53.
  */
 
 namespace DuskPHP\Core\Middlewares;
-
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
@@ -16,7 +15,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ControllerMiddleware implements MiddlewareInterface
 {
-
     /**
      * @var callable
      */
@@ -29,7 +27,7 @@ class ControllerMiddleware implements MiddlewareInterface
      * to the next middleware component to create the response.
      *
      * @param ServerRequestInterface $request
-     * @param DelegateInterface $delegate
+     * @param DelegateInterface      $delegate
      *
      * @return ResponseInterface
      */
@@ -37,6 +35,7 @@ class ControllerMiddleware implements MiddlewareInterface
     {
         $this->response = $delegate->process($request);
         $action = $this->action;
+
         return $action();
     }
 
